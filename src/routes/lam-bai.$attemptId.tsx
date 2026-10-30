@@ -76,7 +76,7 @@ function Take({ paper, skew }: { paper: Paper; skew: number }) {
   const secondsLeft = (deadline - (Date.now() + skew)) / 1000
   const total = useRef(Math.max(1, secondsLeft)).current
   const queue = useRef<Promise<void>>(Promise.resolve())
-  const failed = useRef(new Map<string, number>())
+  const failed = useRef(new Map<string, number | null>())
   const pending = useRef(0)
   const done = useRef(false)
 
@@ -92,7 +92,7 @@ function Take({ paper, skew }: { paper: Paper; skew: number }) {
   }, [])
 
   // Lưu tuần tự để lệnh nộp bài luôn chạy sau các câu trả lời trước đó.
-  function persist(qid: string, choice: number) {
+  function persist(qid: string, choice: number | null) {
     pending.current++
     setSave('saving')
     queue.current = queue.current.then(async () => {
@@ -108,6 +108,11 @@ function Take({ paper, skew }: { paper: Paper; skew: number }) {
   function pick(qid: string, choice: number) {
     setAnswers((a) => ({ ...a, [qid]: choice }))
     persist(qid, choice)
+  }
+
+  function clear(qid: string) {
+    setAnswers(({ [qid]: _, ...rest }) => rest)
+    persist(qid, null)
   }
 
   async function submit() {
@@ -196,6 +201,11 @@ function Take({ paper, skew }: { paper: Paper; skew: number }) {
                     </label>
                   ))}
                 </fieldset>
+                {answers[q.id] !== undefined && (
+                  <div>
+                    <button type="button" className="btn btn--link" onClick={() => clear(q.id)}>Bỏ chọn</button>
+                  </div>
+                )}
                 <label className="check">
                   <input
                     type="checkbox"

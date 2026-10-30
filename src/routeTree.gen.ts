@@ -14,8 +14,10 @@ import { Route as DangNhapRouteImport } from './routes/dang-nhap'
 import { Route as GvRouteImport } from './routes/gv'
 import { Route as HsRouteImport } from './routes/hs'
 import { Route as KhoDeRouteImport } from './routes/kho-de'
+import { Route as XepHangRouteImport } from './routes/xep-hang'
 import { Route as DeExamIdRouteImport } from './routes/de.$examId'
 import { Route as GvIndexRouteImport } from './routes/gv/index'
+import { Route as GvHoiDapRouteImport } from './routes/gv/hoi-dap'
 import { Route as KetQuaAttemptIdRouteImport } from './routes/ket-qua.$attemptId'
 import { Route as LamBaiAttemptIdRouteImport } from './routes/lam-bai.$attemptId'
 import { Route as GvDeExamIdRouteImport } from './routes/gv/de.$examId'
@@ -46,6 +48,11 @@ const KhoDeRoute = KhoDeRouteImport.update({
   path: '/kho-de',
   getParentRoute: () => rootRouteImport,
 } as any)
+const XepHangRoute = XepHangRouteImport.update({
+  id: '/xep-hang',
+  path: '/xep-hang',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DeExamIdRoute = DeExamIdRouteImport.update({
   id: '/de/$examId',
   path: '/de/$examId',
@@ -54,6 +61,11 @@ const DeExamIdRoute = DeExamIdRouteImport.update({
 const GvIndexRoute = GvIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => GvRoute,
+} as any)
+const GvHoiDapRoute = GvHoiDapRouteImport.update({
+  id: '/hoi-dap',
+  path: '/hoi-dap',
   getParentRoute: () => GvRoute,
 } as any)
 const KetQuaAttemptIdRoute = KetQuaAttemptIdRouteImport.update({
@@ -83,7 +95,9 @@ export interface FileRoutesByFullPath {
   '/gv': typeof GvRouteWithChildren
   '/hs': typeof HsRoute
   '/kho-de': typeof KhoDeRoute
+  '/xep-hang': typeof XepHangRoute
   '/de/$examId': typeof DeExamIdRoute
+  '/gv/hoi-dap': typeof GvHoiDapRoute
   '/ket-qua/$attemptId': typeof KetQuaAttemptIdRoute
   '/lam-bai/$attemptId': typeof LamBaiAttemptIdRoute
   '/gv/': typeof GvIndexRoute
@@ -95,7 +109,9 @@ export interface FileRoutesByTo {
   '/dang-nhap': typeof DangNhapRoute
   '/hs': typeof HsRoute
   '/kho-de': typeof KhoDeRoute
+  '/xep-hang': typeof XepHangRoute
   '/de/$examId': typeof DeExamIdRoute
+  '/gv/hoi-dap': typeof GvHoiDapRoute
   '/ket-qua/$attemptId': typeof KetQuaAttemptIdRoute
   '/lam-bai/$attemptId': typeof LamBaiAttemptIdRoute
   '/gv': typeof GvIndexRoute
@@ -109,7 +125,9 @@ export interface FileRoutesById {
   '/gv': typeof GvRouteWithChildren
   '/hs': typeof HsRoute
   '/kho-de': typeof KhoDeRoute
+  '/xep-hang': typeof XepHangRoute
   '/de/$examId': typeof DeExamIdRoute
+  '/gv/hoi-dap': typeof GvHoiDapRoute
   '/ket-qua/$attemptId': typeof KetQuaAttemptIdRoute
   '/lam-bai/$attemptId': typeof LamBaiAttemptIdRoute
   '/gv/': typeof GvIndexRoute
@@ -124,7 +142,9 @@ export interface FileRouteTypes {
     | '/gv'
     | '/hs'
     | '/kho-de'
+    | '/xep-hang'
     | '/de/$examId'
+    | '/gv/hoi-dap'
     | '/ket-qua/$attemptId'
     | '/lam-bai/$attemptId'
     | '/gv/'
@@ -136,7 +156,9 @@ export interface FileRouteTypes {
     | '/dang-nhap'
     | '/hs'
     | '/kho-de'
+    | '/xep-hang'
     | '/de/$examId'
+    | '/gv/hoi-dap'
     | '/ket-qua/$attemptId'
     | '/lam-bai/$attemptId'
     | '/gv'
@@ -149,7 +171,9 @@ export interface FileRouteTypes {
     | '/gv'
     | '/hs'
     | '/kho-de'
+    | '/xep-hang'
     | '/de/$examId'
+    | '/gv/hoi-dap'
     | '/ket-qua/$attemptId'
     | '/lam-bai/$attemptId'
     | '/gv/'
@@ -163,6 +187,7 @@ export interface RootRouteChildren {
   GvRoute: typeof GvRouteWithChildren
   HsRoute: typeof HsRoute
   KhoDeRoute: typeof KhoDeRoute
+  XepHangRoute: typeof XepHangRoute
   DeExamIdRoute: typeof DeExamIdRoute
   KetQuaAttemptIdRoute: typeof KetQuaAttemptIdRoute
   LamBaiAttemptIdRoute: typeof LamBaiAttemptIdRoute
@@ -205,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof KhoDeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/xep-hang': {
+      id: '/xep-hang'
+      path: '/xep-hang'
+      fullPath: '/xep-hang'
+      preLoaderRoute: typeof XepHangRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/de/$examId': {
       id: '/de/$examId'
       path: '/de/$examId'
@@ -217,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/gv/'
       preLoaderRoute: typeof GvIndexRouteImport
+      parentRoute: typeof GvRoute
+    }
+    '/gv/hoi-dap': {
+      id: '/gv/hoi-dap'
+      path: '/hoi-dap'
+      fullPath: '/gv/hoi-dap'
+      preLoaderRoute: typeof GvHoiDapRouteImport
       parentRoute: typeof GvRoute
     }
     '/ket-qua/$attemptId': {
@@ -251,12 +290,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface GvRouteChildren {
+  GvHoiDapRoute: typeof GvHoiDapRoute
   GvIndexRoute: typeof GvIndexRoute
   GvDeExamIdRoute: typeof GvDeExamIdRoute
   GvKetQuaExamIdRoute: typeof GvKetQuaExamIdRoute
 }
 
 const GvRouteChildren: GvRouteChildren = {
+  GvHoiDapRoute: GvHoiDapRoute,
   GvIndexRoute: GvIndexRoute,
   GvDeExamIdRoute: GvDeExamIdRoute,
   GvKetQuaExamIdRoute: GvKetQuaExamIdRoute,
@@ -270,6 +311,7 @@ const rootRouteChildren: RootRouteChildren = {
   GvRoute: GvRouteWithChildren,
   HsRoute: HsRoute,
   KhoDeRoute: KhoDeRoute,
+  XepHangRoute: XepHangRoute,
   DeExamIdRoute: DeExamIdRoute,
   KetQuaAttemptIdRoute: KetQuaAttemptIdRoute,
   LamBaiAttemptIdRoute: LamBaiAttemptIdRoute,

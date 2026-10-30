@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { TopBar, STUDENT_NAV } from '../components/TopBar'
+import { num } from '../lib/format'
 import { publicExamsQuery } from './index'
 
 export const Route = createFileRoute('/kho-de')({
@@ -64,6 +65,7 @@ function Bank() {
                 <ul className="meta">
                   <li>{e.question_count} câu</li>
                   <li>{e.duration_min} phút</li>
+                  {e.rating !== null && <li>{num(e.rating, 1)} trên 5</li>}
                   <li>{e.attempt_count} lượt làm</li>
                 </ul>
                 <Link to="/de/$examId" params={{ examId: e.id }} className="btn">Làm bài</Link>

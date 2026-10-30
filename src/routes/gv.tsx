@@ -26,6 +26,7 @@ export const attemptsQuery = {
 
 /** Đổi lỗi ràng buộc của Postgres sang tiếng Việt dễ hiểu. */
 export function friendly(msg: string): string {
+  if (/đã có học sinh trả lời/.test(msg)) return 'Câu này đã có học sinh trả lời nên không thể thêm hoặc bớt phương án. Em vẫn sửa được nội dung phương án và đổi đáp án đúng.'
   if (/exams_private_class_check/.test(msg)) return 'Đề riêng tư cần chọn lớp trước khi xuất bản.'
   if (/exams_window_check/.test(msg)) return 'Giờ đóng đề phải sau giờ mở đề.'
   if (/duration_min/.test(msg)) return 'Thời gian làm bài phải từ 1 đến 600 phút.'

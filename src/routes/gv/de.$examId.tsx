@@ -62,10 +62,14 @@ function Editor({ exam, questions, classes }: { exam: Exam; questions: Question[
   const [shuffleQ, setShuffleQ] = useState(exam.shuffle_questions)
   const [shuffleO, setShuffleO] = useState(exam.shuffle_options)
   const [showAnswers, setShowAnswers] = useState(exam.show_answers)
+  const [leaderboard, setLeaderboard] = useState(exam.leaderboard)
   const [err, setErr] = useState('')
   const [saved, setSaved] = useState(false)
   const [copied, setCopied] = useState(false)
   const [editing, setEditing] = useState<string | null>(null) // 'new' hoặc id câu hỏi
+  // Chỉ có một khung soạn; đổi sang câu khác thì hỏi trước để không mất nội dung đang gõ.
+  const switchEditing = (id: string) =>
+    (editing === null || window.confirm('Bỏ nội dung chưa lưu của câu đang soạn?')) && setEditing(id)
 
   const refresh = () => qc.invalidateQueries({ queryKey: ['gv'] })
   const link = `${location.origin}/de/${exam.id}`
@@ -89,6 +93,7 @@ function Editor({ exam, questions, classes }: { exam: Exam; questions: Question[
             shuffle_questions: shuffleQ,
             shuffle_options: shuffleO,
             show_answers: showAnswers,
+            leaderboard,
           })
           .eq('id', exam.id),
       )
@@ -206,7 +211,7 @@ function Editor({ exam, questions, classes }: { exam: Exam; questions: Question[
                   ))}
                 </ul>
                 <div className="row">
-                  <button type="button" className="btn" onClick={() => setEditing(q.id)}>Sửa</button>
+                  <button type="button" className="btn" onClick={() => switchEditing(q.id)}>Sửa</button>
                   <button
                     type="button"
                     className="btn btn--link"
@@ -230,7 +235,7 @@ function Editor({ exam, questions, classes }: { exam: Exam; questions: Question[
               onDone={() => setEditing(null)}
             />
           ) : (
-            <button type="button" className="btn btn--primary" onClick={() => setEditing('new')}>Thêm câu hỏi</button>
+            <button type="button" className="btn btn--primary" onClick={() => switchEditing('new')}>Thêm câu hỏi</button>
           )}
         </section>
 
@@ -266,7 +271,8 @@ function Editor({ exam, questions, classes }: { exam: Exam; questions: Question[
           </div>
           <label className="check"><input type="checkbox" checked={shuffleQ} onChange={(e) => setShuffleQ(e.target.checked)} /> <span>Đảo thứ tự câu hỏi</span></label>
           <label className="check"><input type="checkbox" checked={shuffleO} onChange={(e) => setShuffleO(e.target.checked)} /> <span>Đảo thứ tự phương án</span></label>
-          <label className="check"><input type="checkbox" checked={showAnswers} onChange={(e) => setShowAnswers(e.target.checked)} /> <span>Cho xem đáp án sau khi đóng đề</span></label>
+          <label className="check"><input type="checkbox" checked={showAnswers} onChange={(e) => setShowAnswers(e.target.checked)} /> <span>Cho xem đáp án khi đề đóng và không còn ai đang làm (đề không hạn: khi em đã dùng hết số lần làm)</span></label>
+          <label className="check"><input type="checkbox" checked={leaderboard} onChange={(e) => setLeaderboard(e.target.checked)} /> <span>Tính điểm vào bảng xếp hạng</span></label>
 
           {err && <p role="alert" className="error">{err}</p>}
           {saved && !err && <p role="status" className="note">Đã lưu cài đặt.</p>}

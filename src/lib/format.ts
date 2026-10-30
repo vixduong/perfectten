@@ -39,3 +39,30 @@ export function duration(seconds: number): string {
 }
 
 export const LETTERS = 'ABCDEF'
+
+/** Tên hiển thị: bỏ khoảng trắng thừa, rỗng thì trả ''. */
+export function cleanName(s: string): string {
+  return s.trim().replace(/\s+/g, ' ')
+}
+
+type Scored = { submitted_at: string | null; score: number | null }
+
+/** Các bài đã nộp có điểm, cũ -> mới. */
+export function submittedOldestFirst<T extends Scored>(attempts: T[]): (T & { score: number; submitted_at: string })[] {
+  return attempts
+    .filter((a): a is T & { score: number; submitted_at: string } => a.submitted_at !== null && a.score !== null)
+    .sort((a, b) => a.submitted_at.localeCompare(b.submitted_at))
+}
+
+/** Số liệu đầu trang hồ sơ từ các bài đã nộp; tiến bộ = điểm gần nhất trừ điểm liền trước, '—' nếu chưa đủ 2 bài. */
+export function profileFigures(attempts: Scored[]): { taken: string; latest: string; progress: string } {
+  const scores = submittedOldestFirst(attempts).map((a) => a.score)
+  const last = scores.at(-1)
+  const prev = scores.at(-2)
+  const diff = last !== undefined && prev !== undefined ? Math.round((last - prev) * 100) / 100 : null
+  return {
+    taken: String(scores.length),
+    latest: last === undefined ? '—' : num(last),
+    progress: diff === null ? '—' : diff > 0 ? `+${num(diff)}` : diff < 0 ? `−${num(-diff)}` : '0',
+  }
+}

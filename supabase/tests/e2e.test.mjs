@@ -45,11 +45,22 @@ assert.equal(review.attempt.correct_count, 1)
 assert.equal(Number(review.attempt.score), 5)
 assert.equal(review.reveal, true)
 
+// Hỏi giáo viên và nhận trả lời.
+const qid = byBody['O₂ từ đâu?'].id
+const asked = ok(await student.rpc('ask_teacher', { p_attempt: attempt, p_question: qid, p_body: 'Vì sao không phải glucôzơ?' }))
+assert.match((await student.from('inquiries').insert({ attempt_id: attempt, exam_id: exam.id, body: 'x' })).error?.message ?? '', /permission denied/)
+assert.equal(ok(await teacher.from('inquiries').select().is('reply', null)).length, 1)
+ok(await teacher.rpc('reply_inquiry', { p_inquiry: asked, p_body: 'O₂ sinh ra từ quang phân li nước.' }))
+const thread = ok(await student.from('inquiries').select().eq('attempt_id', attempt))
+assert.deepEqual(thread.map((t) => [t.question_id, t.reply]), [[qid, 'O₂ sinh ra từ quang phân li nước.']])
+assert.notEqual(thread[0].replied_at, null)
+
 // Người ngoài lớp: không vào được đề riêng tư.
 const outsider = client()
 ok(await outsider.auth.signUp({ email: mail('la'), password: 'matkhau1', options: { data: { full_name: 'Người lạ' } } }))
 assert.match((await outsider.rpc('start_attempt', { p_exam: exam.id })).error?.message ?? '', /không có trong danh sách/)
 assert.equal(ok(await outsider.from('exams').select()).filter((e) => e.id === exam.id).length, 0)
+assert.equal(ok(await outsider.from('inquiries').select()).length, 0)
 
 // Khách ẩn danh làm đề công khai.
 ok(await teacher.from('exams').update({ access: 'public' }).eq('id', exam.id))
@@ -60,10 +71,20 @@ assert.ok(pub.some((e) => e.id === exam.id))
 const ga = ok(await guest.rpc('start_attempt', { p_exam: exam.id, p_name: 'Khách A' }))
 ok(await guest.rpc('submit_attempt', { p_attempt: ga }))
 assert.equal(Number(ok(await guest.rpc('attempt_review', { p_attempt: ga })).attempt.score), 0)
+assert.match((await guest.rpc('ask_teacher', { p_attempt: ga, p_question: qid, p_body: 'hi' })).error?.message ?? '', /Cần đăng nhập/)
 assert.match((await guest.rpc('join_class', { p_code: cls.code })).error?.message ?? '', /Cần đăng nhập/)
 
 // Giáo viên thấy cả hai bài nộp.
 const rows = ok(await teacher.from('attempts').select().eq('exam_id', exam.id))
 assert.equal(rows.length, 2)
 assert.ok(qs.length === 2)
+
+// Đánh giá và bảng xếp hạng.
+ok(await student.rpc('rate_exam', { p_exam: exam.id, p_rating: 4 }))
+ok(await guest.rpc('rate_exam', { p_exam: exam.id, p_rating: 5 }))
+assert.equal(Number(ok(await client().rpc('public_exams')).find((e) => e.id === exam.id).rating), 4.5)
+const board = ok(await student.rpc('leaderboard', { p_exam: exam.id }))
+assert.deepEqual(board.rows.map((r) => [r.rank, r.name, r.me]), [[1, 'Trần Minh Anh', true], [2, 'Khách A', false]])
+assert.equal(ok(await outsider.rpc('leaderboard', { p_exam: exam.id })), null)
+assert.ok(ok(await client().rpc('exam_quality')).some((e) => e.id === exam.id))
 console.log('ok: e2e flow passed against local Supabase')

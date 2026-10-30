@@ -15,9 +15,13 @@ Stack: TanStack Start + Router + Query (React 19), Supabase (Postgres, Auth, RLS
 - Students: join a class with a code, browse the public exam library, take exams with a timer and per-question
   autosave, view results and wrong answers.
 - People without an account can take "link" and "public" exams (Supabase anonymous sessions).
+- Exam ratings (1–5, after submitting) shown in the library and on the teacher's results page.
+- Leaderboards (`/xep-hang`): per-exam student ranking (best attempt; sort by score, speed, progress, exams taken),
+  visible to the exam's teacher, class members and anyone who submitted; teachers can turn it off per exam. Public exam
+  quality board (rating, discrimination, attempts, average score).
 
 Not built yet (present in the prototype): AI question generation from documents, AI homework assistant, formula/diagram
-editor, leaderboards, the "score garden" profile, forwarding questions to the teacher, exam ratings, the AI admin page.
+editor, the "score garden" profile, forwarding questions to the teacher, the AI admin page.
 
 ## Security lives in the database
 
@@ -29,6 +33,22 @@ All permissions are enforced by RLS and `security definer` functions in `supabas
 - Attempts are written only through RPCs: `start_attempt` checks the open time, class roster, and attempt limit;
   `save_answer` rejects writes after the deadline (+30 seconds); `submit_attempt` grades on the server.
 - Users cannot promote themselves to teacher after signing up (only the `full_name` column is editable).
+- Only allowlisted emails become teachers (see below); everyone else is a student whatever the sign-up form sends.
+- Once any student has answered a question, its number of options is locked (answers are stored by option position).
+
+## Adding teachers
+
+Sign-up creates a teacher only if the email matches a row in `public.teacher_allowlist` (not readable or writable by
+app users; run as the database owner in the Supabase SQL editor). A pattern is a full lowercase email or a domain
+starting with `@`:
+
+```sql
+insert into public.teacher_allowlist (pattern) values ('co.ha@gmail.com'), ('@truong.edu.vn');
+```
+
+Add the email **before** the teacher signs up; an account created earlier stays a student. To promote one, run
+`update public.profiles set role = 'teacher' where id = (select id from auth.users where email = 'co.ha@gmail.com');`.
+Local `supabase db reset` seeds `@truong.edu.vn` from `supabase/seed.sql` (used by the e2e test).
 
 ## Run locally
 
