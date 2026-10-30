@@ -1,0 +1,38 @@
+{
+  "name": "Perfect Ten",
+  "private": true,
+  "packageManager": "pnpm@12.4.2",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3000",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "pnpm build && wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "node supabase/tests/e2e.test.mjs",
+    "test": "node --test src/lib/*.test.ts && node supabase/tests/rls.test.mjs",
+    "db:start": "supabase start",
+    "db:reset": "supabase db reset",
+    "db:types": "supabase gen types typescript --local > src/lib/database.types.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "@tanstack/react-query": "^5.90.0",
+    "@tanstack/react-router": "^1.169.0",
+    "@tanstack/react-start": "^1.169.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.66.0",
+    "@electric-sql/pglite": "^0.5.13",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "supabase": "^2.122.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.3.5",
+    "wrangler": "^4.156.0"
+  }
+}

@@ -1,0 +1,12 @@
+project_id = "diem-muoi"
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000"]
+# Đề "bất kỳ ai có link" và "công khai" cho làm bài không cần tài khoản: dùng phiên ẩn danh.
+enable_anonymous_sign_ins = true
+
+[auth.email]
+# Local: tắt xác nhận email cho tiện thử. Production phải bật (mặc định của Supabase Cloud),
+# vì học sinh được nhận vào lớp theo email.
+enable_confirmations = false

@@ -1,0 +1,34 @@
+:root {
+  color-scheme: light;
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.75rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem; --text-3xl: 2.074rem;
+  --text-display-s: 1.44rem; --text-display: 1.728rem; --text-section: 1.2rem; --text-title: 1rem; --text-lead: 1rem;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --color-error: oklch(52% 0.19 27); --color-success: oklch(50% 0.12 150);
+  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+  --color-paper: oklch(97% 0.012 95); --color-paper-2: oklch(94.5% 0.018 95); --color-paper-3: oklch(91% 0.022 95);
+  --color-ink: oklch(20% 0.014 255); --color-ink-2: oklch(29% 0.014 255); --color-muted: oklch(47% 0.014 255);
+  --color-rule: oklch(87% 0.016 95);
+  --color-accent: oklch(87% 0.175 96); --color-accent-deep: oklch(72% 0.16 92); --color-accent-ink: oklch(20% 0.014 255);
+  --color-accent-2: oklch(50% 0.17 250); --color-accent-3: oklch(70% 0.2 22);
+  --color-mint: oklch(82% 0.15 152); --color-mint-deep: oklch(48% 0.12 155); --color-focus: oklch(50% 0.17 250);
+  --color-card: oklch(98.8% 0.007 95); --color-edge: oklch(83% 0.04 88); --color-fringe: oklch(99.2% 0.006 95);
+  --color-kraft: oklch(63% 0.085 62); --color-sand: oklch(77% 0.1 76); --color-sugar: oklch(89% 0.035 236);
+  --color-hill-1: oklch(94.5% 0.03 118); --color-hill-2: oklch(91.5% 0.045 135); --color-leaf: oklch(64% 0.15 150);
+  --font-display: "Quicksand", ui-rounded, ui-sans-serif, sans-serif; --font-body: var(--font-display);
+  --font-outlier: "Patrick Hand", "Quicksand", cursive; --font-mono: ui-monospace, Menlo, Consolas, monospace;
+  --radius-card: 24px; --radius-stock: 16px; --radius-input: 14px; --radius-pill: 999px; --rule-hair: 1px;
+  --shadow-card: 0 1px 2px oklch(20% 0.014 255 / 0.06), 0 12px 28px -14px oklch(20% 0.014 255 / 0.22);
+  --shadow-paper: drop-shadow(0 0 0.6px oklch(20% 0.014 255 / 0.32)) drop-shadow(1.5px 2.5px 1.5px oklch(20% 0.014 255 / 0.1)) drop-shadow(6px 14px 16px oklch(20% 0.014 255 / 0.13));
+  --tracking-display: -0.015em; --display-weight: 700;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+  --color-coral-deep: oklch(47% 0.17 25); --color-on-ink: var(--color-paper); --color-on-ink-2: var(--color-paper-3);
+  --font-math: math, "Cambria Math", "STIX Two Math", ui-serif, serif;
+  --text-home: clamp(2.5rem, 4.6vw, 4.25rem); --text-home-2: clamp(1.75rem, 3.2vw, 2.75rem); --text-figure: 2.5rem; --text-grade: 4.5rem; --text-comment: 1.5rem; --page-max: 1240px; --page-narrow: 1040px; --torn-h: 14px;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 9 -4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.012 0.32' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7 -3.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.016'/%3E%3C/svg%3E");
+  --torn-bottom: polygon(0 0, 100% 0, 100.0% 7.8px, 97.7% 6.4px, 95.5% 6.1px, 93.2% 8.6px, 90.9% 7.7px, 88.6% 8.9px, 86.4% 8.8px, 84.1% 7.7px, 81.8% 8.4px, 79.5% 8.2px, 77.3% 9.8px, 75.0% 6.9px, 72.7% 8.5px, 70.5% 8.5px, 68.2% 5.3px, 65.9% 9.8px, 63.6% 9.6px, 61.4% 9.0px, 59.1% 5.6px, 56.8% 7.6px, 54.5% 11.7px, 52.3% 8.2px, 50.0% 7.9px, 47.7% 9.6px, 45.5% 9.5px, 43.2% 7.9px, 40.9% 9.2px, 38.6% 6.7px, 36.4% 5.8px, 34.1% 6.5px, 31.8% 8.0px, 29.5% 9.7px, 27.3% 7.8px, 25.0% 8.6px, 22.7% 9.4px, 20.5% 6.1px, 18.2% 7.8px, 15.9% 7.5px, 13.6% 7.1px, 11.4% 6.0px, 9.1% 9.7px, 6.8% 6.8px, 4.5% 6.7px, 2.3% 8.3px, 0.0% 9.6px);
+  --torn-top: polygon(0.0% 3.6px, 2.3% 2.4px, 4.5% 1.7px, 6.8% 2.2px, 9.1% 2.5px, 11.4% 2.0px, 13.6% 5.0px, 15.9% 1.4px, 18.2% 5.4px, 20.5% 2.7px, 22.7% 5.2px, 25.0% 3.8px, 27.3% 5.4px, 29.5% 3.0px, 31.8% 4.1px, 34.1% 5.6px, 36.4% 2.4px, 38.6% 4.2px, 40.9% 3.3px, 43.2% 2.1px, 45.5% 2.0px, 47.7% 2.3px, 50.0% 4.8px, 52.3% 5.3px, 54.5% 3.1px, 56.8% 0.5px, 59.1% 2.4px, 61.4% 0.9px, 63.6% 0.5px, 65.9% 6.0px, 68.2% 3.2px, 70.5% 0.9px, 72.7% 2.7px, 75.0% 3.6px, 77.3% 0.8px, 79.5% 5.5px, 81.8% 8.0px, 84.1% 5.3px, 86.4% 5.4px, 88.6% 4.6px, 90.9% 1.7px, 93.2% 0.1px, 95.5% 1.7px, 97.7% 0.0px, 100.0% 3.7px, 100% 100%, 0 100%);
+}

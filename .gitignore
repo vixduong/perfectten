@@ -1,0 +1,10 @@
+node_modules
+dist
+.output
+.wrangler
+.tanstack
+.env
+.env.local
+.dev.vars
+supabase/.temp
+supabase/.branches

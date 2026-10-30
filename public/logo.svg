@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48" role="img" aria-label="Điểm Mười">
+  <rect x="2" y="5" width="44" height="42" rx="12" fill="#BFA11A"/>
+  <rect x="2" y="1" width="44" height="42" rx="12" fill="#F2D544"/>
+  <g transform="rotate(-5 24 22)" fill="none" stroke="#A62B22" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11.5 13.5 17 9.5V30"/>
+    <path d="M31 9.5c-4.800 0-7.500 4.600-7.500 10.300S26.200 30 31 30s7.500-4.500 7.500-10.200S35.800 9.500 31 9.500Z"/>
+    <path d="M9 36.500c9.500-2 20-2.200 30-.8" stroke-width="2.800"/>
+  </g>
+</svg>
