@@ -8,7 +8,7 @@ import type { Role } from '../lib/types'
 export const Route = createFileRoute('/dang-nhap')({
   validateSearch: (s: Record<string, unknown>): { next?: string } => ({
     // Chỉ cho chuyển tiếp trong cùng trang web.
-    next: typeof s.next === 'string' && s.next.startsWith('/') && !s.next.startsWith('//') ? s.next : undefined,
+    next: typeof s.next === 'string' && s.next.startsWith('/') && !s.next.startsWith('//') && !s.next.includes('\\') ? s.next : undefined,
   }),
   head: () => ({ meta: [{ title: 'Đăng nhập · Điểm Mười' }] }),
   component: Login,
@@ -25,12 +25,14 @@ function Login() {
   const [pass, setPass] = useState('')
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
+  const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     setError('')
     setInfo('')
+    setNotice('')
     if (mode === 'up' && !name.trim()) return setError('Vui lòng nhập họ tên.')
     if (!email.trim() || pass.length < 6) return setError('Vui lòng nhập email và mật khẩu từ 6 ký tự.')
     setBusy(true)
@@ -52,6 +54,11 @@ function Login() {
         unwrap(await supabase.auth.signInWithPassword({ email: email.trim(), password: pass }))
       }
       const me = await qc.fetchQuery({ queryKey: meKey, queryFn: fetchMe, staleTime: 0 })
+      if (mode === 'up' && role === 'teacher' && me?.profile.role !== 'teacher') {
+        // Email chưa nằm trong danh sách giáo viên: cho đọc thông báo trước khi vào trang học sinh.
+        setNotice('Tài khoản đã được tạo với vai trò học sinh vì email này chưa nằm trong danh sách giáo viên. Nhờ quản trị viên của trường thêm email của thầy/cô vào danh sách, sau đó đăng nhập lại.')
+        return
+      }
       navigate({ to: next ?? (me?.profile.role === 'teacher' ? '/gv' : '/hs') })
     } catch (err) {
       setError(err instanceof Error ? translate(err.message) : 'Có lỗi, vui lòng thử lại.')
@@ -96,6 +103,12 @@ function Login() {
             </div>
             {error && <p role="alert" className="error">{error}</p>}
             {info && <p role="status" className="well well--mint">{info}</p>}
+            {notice && (
+              <div role="status" className="well well--coral stack-sm">
+                <p>{notice}</p>
+                <button type="button" className="btn" onClick={() => navigate({ to: next ?? '/hs' })}>Vào trang học sinh</button>
+              </div>
+            )}
             <button type="submit" className="btn btn--primary" disabled={busy} aria-busy={busy}>
               {busy ? 'Đang xử lý…' : mode === 'in' ? 'Đăng nhập' : 'Tạo tài khoản'}
             </button>

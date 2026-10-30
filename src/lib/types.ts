@@ -41,6 +41,7 @@ export type Exam = {
   shuffle_questions: boolean
   shuffle_options: boolean
   show_answers: boolean
+  leaderboard: boolean
   created_at: string
 }
 
@@ -59,6 +60,7 @@ export type Attempt = {
   exam_id: string
   user_id: string
   display_name: string
+  question_order: string[]
   answers: Record<string, number>
   started_at: string
   deadline: string
@@ -98,6 +100,25 @@ export type PublicExam = {
   teacher_name: string
   question_count: number
   attempt_count: number
+  rating: number | null
+  rating_count: number
+}
+
+/** leaderboard(): lượt tốt nhất của mỗi người. `gain` so với bài nộp ngay trước (đề khác), null nếu chưa có. */
+export type Leaderboard = {
+  exam: { id: string; title: string }
+  rows: { rank: number; name: string; score: number; secs: number; done: number; gain: number | null; me: boolean }[]
+}
+
+/** exam_quality(): chất lượng đề công khai. `discrimination` null khi chưa đủ 4 bài. */
+export type ExamQuality = {
+  id: string
+  title: string
+  teacher_name: string
+  rating: number | null
+  attempts: number
+  avg_score: number
+  discrimination: number | null
 }
 
 /** attempt_questions(): đề cho một lượt làm, không có đáp án. `i` là chỉ số gốc của phương án. */
@@ -130,4 +151,17 @@ export type Review = {
   exam: { title: string; subject: string }
   reveal: boolean
   questions: { id: string; body: string; options: string[]; chosen: number | null; is_correct: boolean; correct: number | null }[]
+}
+
+/** Bảng inquiries: câu hỏi của học sinh về một câu của bài đã nộp; `reply` null là chưa được trả lời. */
+export type Inquiry = {
+  id: string
+  attempt_id: string
+  question_id: string | null
+  exam_id: string
+  student_id: string
+  body: string
+  reply: string | null
+  replied_at: string | null
+  created_at: string
 }

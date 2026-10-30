@@ -32,8 +32,12 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd')
 
 const rosterSize = (d: Data, classId: string | null) => d.roster.filter((r) => r.class_id === classId).length
-const submittedCount = (d: Data, examId: string) =>
-  new Set(d.attempts.filter((a) => a.exam_id === examId && a.submitted_at).map((a) => a.user_id)).size
+/** Số em trong danh sách lớp của đề đã nộp (bỏ khách và bài thử của giáo viên, không đếm trùng lượt làm). */
+function submittedCount(d: Data, examId: string) {
+  const classId = d.exams.find((e) => e.id === examId)?.class_id
+  const members = new Set(d.roster.filter((r) => r.class_id === classId && r.user_id).map((r) => r.user_id))
+  return new Set(d.attempts.filter((a) => a.exam_id === examId && a.submitted_at && members.has(a.user_id)).map((a) => a.user_id)).size
+}
 
 function latestExam(d: Data, classId: string): Exam | undefined {
   return d.exams.filter((e) => e.class_id === classId && e.status !== 'draft').sort((a, b) => b.created_at.localeCompare(a.created_at))[0]
